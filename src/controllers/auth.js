@@ -1,6 +1,6 @@
 const { generateJWT } = require("../helpers/generate-jwt");
 const User = require("../models/User");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const signUp = async (req, res) => {
     const { name, email, password } = req.body;

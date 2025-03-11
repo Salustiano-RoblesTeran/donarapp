@@ -1,11 +1,10 @@
 const express = require("express");
-const { payment } = require("../routes/auth")
 
 //CORS
 const cors = require('cors');
 
 //DB
-const { dbConnection } = require("../../config/database");
+const { dbConnection } = require("../config/database");
 
 class Server {
     constructor () {
@@ -14,11 +13,9 @@ class Server {
         //Port
         this.port = process.env.PORT;
 
-
         // Path
-
-        //Login
         this.authPath = "/api/auth";
+        this.paymentPath = "/api/payments"; // Añadido el path para los pagos
 
         // DB
         this.conectarDB();
@@ -26,32 +23,39 @@ class Server {
         // Middlewares
         this.middlewares();
 
-        //Rutas
+        // Rutas
         this.routes();
     }
-    //Base de datos
+
+    // Conexión a la base de datos
     async conectarDB() {
         await dbConnection();
     }
+
+    // Middlewares
     middlewares() {
-    // CORS
-    this.app.use(cors());
-    
-    this.app.use(express.json());
-    
-    //Mostrar carpeta publica
-    this.app.use(express.static("public"));
+        // CORS
+        this.app.use(cors());
+
+        this.app.use(express.json());
+
+        // Mostrar carpeta publica
+        this.app.use(express.static("public"));
     }
 
+    // Rutas
     routes () {
-        this.app.use(this.authPath, require("../routes/auth"))
+        this.app.use(this.authPath, require("../routes/auth"));
+        this.app.use(this.paymentPath, require("../routes/payments"));
     }
 
+    // Iniciar el servidor
     listen() {
         this.app.listen(this.port, () => {
-          console.log("Server Online", this.port);
+            console.log("Server Online", this.port);
         });
-      }
+    }
 }
 
-module.export = Server;
+// Cambié module.export por module.exports
+module.exports = Server;
