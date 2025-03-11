@@ -1,11 +1,11 @@
-import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
-import dotenv from "dotenv";
+const  { MercadoPagoConfig, Preference, Payment } =  require("mercadopago");
+const dotenv = require("dotenv");
 dotenv.config();
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
 
 // Crear una orden (preferencia)
-export const createOrder = async (req, res) => {
+const createOrder = async (req, res) => {
   const { title, amount, description } = req.body;
 
   try {
@@ -39,7 +39,7 @@ export const createOrder = async (req, res) => {
 };
 
 // Recibir el webhook de Mercado Pago
-export const reciveWebhook = async (req, res) => {
+const reciveWebhook = async (req, res) => {
   const body = req.body;
 
 
@@ -68,3 +68,8 @@ export const reciveWebhook = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+module.exports = {
+  reciveWebhook,
+  createOrder
+}
