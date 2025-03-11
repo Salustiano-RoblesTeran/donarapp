@@ -1,9 +1,9 @@
 const { Router } = require("express");
-const { createOrder, reciveWebhook } = require("../controllers/paymentCtrl.js");
+const { createDonation, reciveWebhook, getUser, dashboard, transaction } = require("../controllers/paymentCtrl.js");
 
 const router = Router();
 
-router.post('/create-order', createOrder);
+router.post('/donate', createDonation);
 
 router.get('/success', (req, res) => {
     res.send('Payment success');
@@ -19,5 +19,10 @@ router.get('/pending', (req, res) => {
 
 router.post('/webhook', reciveWebhook); 
 
-// Usar module.exports en lugar de export default
+router.get('/user/:id', getUser)
+
+router.get('/dashboard', dashboard)
+
+router.get('/transaction', transaction)
+
 module.exports = router;

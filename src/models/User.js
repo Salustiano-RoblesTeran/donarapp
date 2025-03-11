@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
     profile_url: {type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    transactions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Transaction" }],
 });
 
 

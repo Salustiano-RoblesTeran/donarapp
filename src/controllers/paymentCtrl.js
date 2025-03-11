@@ -1,12 +1,14 @@
 const  { MercadoPagoConfig, Preference, Payment } =  require("mercadopago");
 const dotenv = require("dotenv");
+const Transaction = require("../models/Transaction");
+const User = require("../models/User")
 dotenv.config();
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
 
 // Crear una orden (preferencia)
-const createOrder = async (req, res) => {
-  const { title, amount, description } = req.body;
+const createDonation = async (req, res) => {
+  const { userId, title, amount, description } = req.body;
 
   try {
     const preference = await new Preference(client).create({
@@ -14,19 +16,21 @@ const createOrder = async (req, res) => {
         items: [
           {
             id: "donation",
-            title,
             unit_price: amount,
             quantity: 1,
-            description,
+            title,
           },
         ],
-        back_urls: {
-          success: "http://localhost:3000/success",
-          failure: "http://localhost:3000/failure",
-          pending: "http://localhost:3000/pending",
+        metadata: {
+          userId,
+          message: description
         },
-        notification_url:
-          "https://ed01-2802-8010-941e-5c00-1cf7-1700-f1b0-67f0.ngrok-free.app/webhook",
+        back_urls: {
+          success: "http://localhost:3000/api/payments/success",
+          failure: "http://localhost:3000/api/payments/failure",
+          pending: "http://localhost:3000/api/payments/pending",
+        },
+        notification_url: "https://9bbc-190-50-232-199.ngrok-free.app/api/payments/webhook",
         auto_return: "approved",
       },
     })
@@ -42,24 +46,43 @@ const createOrder = async (req, res) => {
 const reciveWebhook = async (req, res) => {
   const body = req.body;
 
-
-  console.log("Body del webhook:", body);
-  console.log("ID de pago:", body.id);
-
   try {
     // Obtener el pago usando el ID recibido en el webhook
     const payment = await new Payment(client).get({ id: body.data.id });
 
+    console.log("payment: ",payment)
+
     // Verificar que el estado del pago sea aprobado
     if (payment.status === "approved") {
+      const userData = payment.metadata;
+      console.log("userId", userData.user_id, userData.message)
+      if (userData === null) {
+        return res.status(400).json({ success: false, message: "Falta el ID de usuario en la metadata" });
+      }
       // Formatear la información de la donación
       const donation = {
-        id: payment.id,
+        orderId: userData.user_id,  
+        status: payment.status,
         amount: payment.transaction_amount,
-        message: payment.description,
+        title: payment.description,
+        description: userData.message
       };
 
-      console.log(donation); //! BASE DE DATOS!
+      console.log(donation)
+
+
+      const newPayment = new Transaction(donation);
+      await newPayment.save();
+
+      const user = await User.findById(userData.user_id);
+      if (!user) {
+        return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+      }
+
+      user.transactions.push(newPayment._id); // Agregar la transacción al usuario
+      await user.save(); // Guardar cambios en el usuario
+
+      return res.status(200).json({ succes: true});
 
     } else {
       return res.status(200).json({ success: false, message: "Pago no aprobado" });
@@ -69,7 +92,31 @@ const reciveWebhook = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findById(id).select("-password");
+    if (!user) return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const dashboard = async (req, res) => {
+
+}
+
+const transaction = async (req, res) => {
+
+}
+
 module.exports = {
   reciveWebhook,
-  createOrder
+  createDonation,
+  getUser,
+  dashboard,
+  transaction
+
 }
