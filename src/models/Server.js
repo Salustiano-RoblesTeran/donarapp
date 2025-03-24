@@ -1,4 +1,5 @@
 const express = require("express");
+require("../helpers/load_categories")
 
 //CORS
 const cors = require('cors');
@@ -15,7 +16,8 @@ class Server {
 
         // Path
         this.authPath = "/api/auth";
-        this.paymentPath = "/api/payments"; // Añadido el path para los pagos
+        this.paymentPath = "/api/payments"; 
+        this.fundationsPath = "/api/fundations";
 
         // DB
         this.conectarDB();
@@ -47,6 +49,7 @@ class Server {
     routes () {
         this.app.use(this.authPath, require("../routes/auth"));
         this.app.use(this.paymentPath, require("../routes/payments"));
+        this.app.use(this.fundationsPath, require("../routes/fundations"))
     }
 
     // Iniciar el servidor

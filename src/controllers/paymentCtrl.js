@@ -105,8 +105,27 @@ const getUser = async (req, res) => {
 }
 
 const dashboard = async (req, res) => {
+  try {
+    const uid = req.usuario._id; // Asegúrate de que `req.usuario` contiene `_id`
 
-}
+    console.log("User ID:", uid);
+
+    // Obtener usuario y popular las transacciones
+    const transaction = await User.findById(uid).populate("transactions"); 
+
+    if (!transaction) {
+      return res.status(404).json({ message: "No se encontraron transacciones" });
+    }
+
+    console.log("Transactions:", transaction);
+    
+    res.json({ transactions: transaction.transactions });
+  } catch (error) {
+    console.error("Error en dashboard:", error);
+    res.status(500).json({ message: "Error al obtener las transacciones", error });
+  }
+};
+
 
 const transaction = async (req, res) => {
 
@@ -118,5 +137,4 @@ module.exports = {
   getUser,
   dashboard,
   transaction
-
 }
