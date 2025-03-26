@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { createDonation, reciveWebhook, getUser, dashboard, transaction } = require("../controllers/paymentCtrl.js");
+const { createDonation, reciveWebhook, getTransaction } = require("../controllers/paymentCtrl.js");
 
 const { validateJWT } = require("../middlewares/validate_jwt.js")
 
@@ -19,12 +19,8 @@ router.get('/pending', (req, res) => {
     res.send('Payment pending');
 });
 
-router.post('/webhook', reciveWebhook); 
+router.post('/webhook', reciveWebhook);
 
-router.get('/user/:id', getUser)
-
-router.get('/dashboard', validateJWT, dashboard)
-
-router.get('/transaction', transaction)
+router.get('/transaction/:fundationId', getTransaction)
 
 module.exports = router;
