@@ -10,6 +10,13 @@ const FundationSchema = new mongoose.Schema({
     password: { type: String, required: true },
     fundsRaised: { type: Number, default: 0 },
     targetAmount: { type: Number, require: true },
+    allTransactions: [{
+        status: { type: String, required: true },
+        amount: { type: Number, required: true },
+        title: { type: String, required: true },
+        description: { type: String, required: false },
+        date: { type: Date, default: Date.now}
+    }],
     category: { type: mongoose.Schema.Types.ObjectId, ref: "Categories", required: true }
 });
 

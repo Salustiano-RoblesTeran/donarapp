@@ -4,12 +4,12 @@ const bcrypt = require("bcryptjs");
 const Categories = require("../models/Categories");
 
 const signUp = async (req, res) => {
-    const { fundation_name, name, last_name, email, profile_url, category, description, password } = req.body;
+    const { fundation_name, name, last_name, email, profile_url, category, targetAmount, description, password } = req.body;
     
     try {
         
         // Validar campos requeridos
-        if (!fundation_name || !name || !last_name || !email || !category || !description || !password) {
+        if (!fundation_name || !name || !last_name || !email || !category || !description || !password || !targetAmount) {
             return res.status(400).json({ message: "Todos los campos son obligatorios." });
         }
 
@@ -43,6 +43,7 @@ const signUp = async (req, res) => {
             profile_url,
             category,
             description,
+            targetAmount,
             password: hashedPassword,
             totalRaised: 0 // Asignar 0 por defecto
         });
