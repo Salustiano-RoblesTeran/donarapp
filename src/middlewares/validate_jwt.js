@@ -14,15 +14,15 @@ const validateJWT = async (req = request, res = response, next) => {
   try {
     const { uid } = jwt.verify(token, process.env.secretOrPrivateKey);
 
-    const usuario = await User.findById(uid);
+    const fundation = await Fundation.findById(uid);
 
-    if (!usuario) {
+    if (!fundation) {
       return res.status(401).json({
         msg: "User does not exist",
       });
     }
 
-    req.usuario = usuario;
+    req.fundation = fundation;
 
     next();
   } catch (error) {

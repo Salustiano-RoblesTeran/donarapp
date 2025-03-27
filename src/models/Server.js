@@ -18,6 +18,7 @@ class Server {
         this.authPath = "/api/auth";
         this.paymentPath = "/api/payments"; 
         this.fundationsPath = "/api/fundations";
+        this.dashboardPath = "/api/dashboard";
 
         // DB
         this.conectarDB();
@@ -49,7 +50,8 @@ class Server {
     routes () {
         this.app.use(this.authPath, require("../routes/auth"));
         this.app.use(this.paymentPath, require("../routes/payments"));
-        this.app.use(this.fundationsPath, require("../routes/fundations"))
+        this.app.use(this.fundationsPath, require("../routes/fundations"));
+        this.app.use(this.dashboardPath, require("../routes/dashboard"));
     }
 
     // Iniciar el servidor

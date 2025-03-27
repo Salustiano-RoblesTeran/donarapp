@@ -29,7 +29,7 @@ const createDonation = async (req, res) => {
           failure: "http://localhost:3000/api/payments/failure",
           pending: "http://localhost:3000/api/payments/pending",
         },
-        notification_url: "https://33fd-138-204-159-131.ngrok-free.app/api/payments/webhook",
+        notification_url: "https://7ead-138-204-159-142.ngrok-free.app/api/payments/webhook",
         auto_return: "approved",
       },
     })
