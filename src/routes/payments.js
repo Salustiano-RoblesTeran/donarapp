@@ -7,8 +7,8 @@ const router = Router();
 
 router.post('/donate', createDonation);
 
-router.get('/success', (req, res) => {
-    res.send('Payment success');
+router.get('/success', validateJWT, (req, res) => {
+    res.redirect('http://localhost:5173/success')
 });
 
 router.get('/failure', (req, res) => {
