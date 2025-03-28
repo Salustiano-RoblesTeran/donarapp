@@ -1,15 +1,15 @@
-const Fundation = require("../models/Fundation");
+const Foundation = require("../models/Foundation");
 const Categories = require("../models/Categories")
 
-const getFundations = async (req, res) => {
+const getFoundations = async (req, res) => {
   try {
-    const fundation = await Fundation.find()
+    const foundation = await foundation.find()
       .select("-password")
       .populate("category", "category"); 
 
-    if (!fundation) return res.status(404).json({ success: false, message: "No hay fundaciones para mostrar" });
+    if (!foundation) return res.status(404).json({ success: false, message: "No hay fundaciones para mostrar" });
 
-    res.json({ success: true, fundation });
+    res.json({ success: true, foundation });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -25,32 +25,32 @@ const getCateogires = async (req, res) => {
   }
 }
 
-const getFundationsCategories = async (req, res) => {
+const getFoundationsCategories = async (req, res) => {
   try {
     const { category } = req.query;
 
-    const fundationsFilter =  await Fundation.find({ category });
-    res.json({ fundationsFilter })
+    const foundationsFilter =  await Foundation.find({ category });
+    res.json({ foundationsFilter })
 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
 
-const getFundationId = async (req, res) => {
+const getFoundationId = async (req, res) => {
   try {
     const { id } = req.params;
     
     // Buscar la fundación por el ID
-    const fundation = await Fundation.findById(id).select("-password").populate("category", "category");
+    const foundation = await Foundation.findById(id).select("-password").populate("category", "category");
     
-    if (!fundation) {
+    if (!foundation) {
       return res.status(404).json({ error: 'Fundación no encontrada' });
     }
 
 
     // Devolver la fundación y el monto recaudado
-    res.json({ fundation });
+    res.json({ foundation });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -58,8 +58,8 @@ const getFundationId = async (req, res) => {
 
 
 module.exports = {
-    getFundations,
+    getFoundations,
     getCateogires,
-    getFundationsCategories,
-    getFundationId
+    getFoundationsCategories,
+    getFoundationId
 }

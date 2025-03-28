@@ -1,6 +1,6 @@
 const { request, response } = require("express");
 const jwt = require("jsonwebtoken");
-const Fundation = require('../models/Fundation')
+const Foundation = require('../models/Foundation')
 
 const validateJWT = async (req = request, res = response, next) => {
   const token = req.header("x-token");
@@ -14,15 +14,15 @@ const validateJWT = async (req = request, res = response, next) => {
   try {
     const { uid } = jwt.verify(token, process.env.secretOrPrivateKey);
 
-    const fundation = await Fundation.findById(uid);
+    const foundation = await Foundation.findById(uid);
 
-    if (!fundation) {
+    if (!foundation) {
       return res.status(401).json({
         msg: "User does not exist",
       });
     }
 
-    req.fundation = fundation;
+    req.foundation = foundation;
 
     next();
   } catch (error) {

@@ -17,7 +17,7 @@ class Server {
         // Path
         this.authPath = "/api/auth";
         this.paymentPath = "/api/payments"; 
-        this.fundationsPath = "/api/fundations";
+        this.foundationsPath = "/api/foundations";
         this.dashboardPath = "/api/dashboard";
 
         // DB
@@ -50,7 +50,7 @@ class Server {
     routes () {
         this.app.use(this.authPath, require("../routes/auth"));
         this.app.use(this.paymentPath, require("../routes/payments"));
-        this.app.use(this.fundationsPath, require("../routes/fundations"));
+        this.app.use(this.foundationsPath, require("../routes/foundations"));
         this.app.use(this.dashboardPath, require("../routes/dashboard"));
     }
 

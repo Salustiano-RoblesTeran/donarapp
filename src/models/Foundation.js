@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const FundationSchema = new mongoose.Schema({
-    fundation_name: { type: String, required: true, unique: true },
+const FoundationSchema = new mongoose.Schema({
+    foundation_name: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     last_name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -21,4 +21,4 @@ const FundationSchema = new mongoose.Schema({
 });
 
 
-module.exports = mongoose.model("Fundation", FundationSchema);
+module.exports = mongoose.model("Foundation", FoundationSchema);

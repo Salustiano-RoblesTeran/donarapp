@@ -1,26 +1,26 @@
 const { generateJWT } = require("../helpers/generate-jwt");
-const Fundation = require("../models/Fundation");
+const Foundation = require("../models/Foundation");
 const bcrypt = require("bcryptjs");
 const Categories = require("../models/Categories");
 
 const signUp = async (req, res) => {
-    const { fundation_name, name, last_name, email, profile_url, category, targetAmount, description, password } = req.body;
+    const { foundation_name, name, last_name, email, profile_url, category, targetAmount, description, password } = req.body;
     
     try {
         
         // Validar campos requeridos
-        if (!fundation_name || !name || !last_name || !email || !category || !description || !password || !targetAmount) {
+        if (!foundation_name || !name || !last_name || !email || !category || !description || !password || !targetAmount) {
             return res.status(400).json({ message: "Todos los campos son obligatorios." });
         }
 
         // Verificar si el nombre de la fundación ya existe
-        const fundationExist = await Fundation.findOne({ fundation_name });
-        if (fundationExist) {
+        const FoundationExist = await Foundation.findOne({ foundation_name });
+        if (FoundationExist) {
             return res.status(400).json({ message: "El nombre de la fundación ya está registrado." });
         }
 
         // Verificar si el email ya está registrado
-        const mailExist = await Fundation.findOne({ email });
+        const mailExist = await Foundation.findOne({ email });
         if (mailExist) {
             return res.status(400).json({ message: "El email ya está registrado." });
         }
@@ -35,8 +35,8 @@ const signUp = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Crear el nuevo usuario
-        const newFundation = new Fundation({
-            fundation_name,
+        const newFoundation = new Foundation({
+            foundation_name,
             name,
             last_name,
             email,
@@ -48,7 +48,7 @@ const signUp = async (req, res) => {
             totalRaised: 0 // Asignar 0 por defecto
         });
 
-        await newFundation.save();
+        await newFoundation.save();
         res.status(201).json({ message: "Fundación registrada exitosamente." });
 
     } catch (error) {
@@ -62,13 +62,13 @@ const signIn = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const fundation = await Fundation.findOne({ email });
-        if (!fundation) return res.status(404).json({ message: "Fundacion no encontrado" })
+        const Foundation = await Foundation.findOne({ email });
+        if (!Foundation) return res.status(404).json({ message: "Fundacion no encontrado" })
         
-            const isMatch = await bcrypt.compare(password, fundation.password);
+            const isMatch = await bcrypt.compare(password, Foundation.password);
             if (!isMatch) return res.status(400).json({ message: "Contraseña incorrecta" });
 
-            const token = await generateJWT(fundation._id);
+            const token = await generateJWT(Foundation._id);
 
             res.json({token})
     }catch (error) {
@@ -78,11 +78,11 @@ const signIn = async (req, res) => {
 
 const isAuthenticate = async (req, res) => {
     try {
-        const { id } = req.fundation;
+        const { id } = req.Foundation;
         
-        const fundation = await Fundation.findById(id);
+        const Foundation = await Foundation.findById(id);
 
-        if (fundation) {
+        if (Foundation) {
             return res.json({ message: 'Fundación encontrada', success: true });
         } else {
             return res.status(404).json({ message: 'Fundación no encontrada', success: false });

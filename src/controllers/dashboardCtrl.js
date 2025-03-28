@@ -1,22 +1,22 @@
-const Fundation = require("../models/Fundation");
+const Foundation = require("../models/Foundation");
 
-const getFundation = async (req, res) => {
+const getFoundation = async (req, res) => {
     try {
-        const { id } = req.fundation;
-        const fundation = await Fundation.findById(id);
+        const { id } = req.foundation;
+        const foundation = await Foundation.findById(id);
 
-        if (!fundation) {
+        if (!foundation) {
             return res.status(404).json({ msg: "Fundación no encontrada" });
         }
 
         // Estructurar la respuesta con solo los campos requeridos
         const responseData = {
-            fundation_name: fundation.fundation_name,
-            profile_url: fundation.profile_url,
-            description: fundation.description,
-            fundsRaised: fundation.fundsRaised,
-            targetAmount: fundation.targetAmount,
-            allTransactions: fundation.allTransactions
+            foundation_name: foundation.foundation_name,
+            profile_url: foundation.profile_url,
+            description: foundation.description,
+            fundsRaised: foundation.fundsRaised,
+            targetAmount: foundation.targetAmount,
+            allTransactions: foundation.allTransactions
         };
 
         return res.json(responseData);
@@ -31,5 +31,5 @@ const getFundation = async (req, res) => {
 
 
 module.exports = {
-    getFundation
+    getFoundation
 };

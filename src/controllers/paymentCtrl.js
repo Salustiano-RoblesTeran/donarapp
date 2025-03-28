@@ -1,13 +1,13 @@
 const  { MercadoPagoConfig, Preference, Payment } =  require("mercadopago");
 const dotenv = require("dotenv");
-const Fundation = require("../models/Fundation")
+const Foundation = require("../models/Foundation")
 dotenv.config();
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
 
 // Crear una orden (preferencia)
 const createDonation = async (req, res) => {
-  const { fundationId, title, amount, description } = req.body;
+  const { foundationId, title, amount, description } = req.body;
 
   try {
     const preference = await new Preference(client).create({
@@ -21,7 +21,7 @@ const createDonation = async (req, res) => {
           },
         ],
         metadata: {
-          fundation_id: fundationId,
+          foundation_id: foundationId,
           message: description
         },
         back_urls: {
@@ -49,12 +49,12 @@ const reciveWebhook = async (req, res) => {
     // Obtener el pago usando el ID recibido en el webhook
     const payment = await new Payment(client).get({ id: body.data.id });
 
-    const fundationData = payment.metadata;
-    console.log(fundationData.fundation_id, payment.transaction_amount, fundationData.message);
+    const foundationData = payment.metadata;
+    console.log(foundationData.foundation_id, payment.transaction_amount, foundationData.message);
 
-    const fundation = await Fundation.findById(fundationData.fundation_id);
+    const foundation = await Foundation.findById(foundationData.foundation_id);
 
-    if (!fundation) {
+    if (!foundation) {
       return res.status(400).json({ success: false, message: "No existe una fundación con ese ID." });
     }
 
@@ -63,22 +63,22 @@ const reciveWebhook = async (req, res) => {
       status: payment.status,
       amount: payment.transaction_amount,
       title: payment.description,
-      description: fundationData.message,
+      description: foundationData.message,
       date: new Date(),
     };
 
     console.log("donation", donation);
 
     // Agregar la donación a las transacciones de la fundación
-    fundation.allTransactions.push(donation);
+    foundation.allTransactions.push(donation);
 
     // Actualizar el total recaudado en el campo 'fundsRaised'
-    fundation.fundsRaised += payment.transaction_amount;
+    foundation.fundsRaised += payment.transaction_amount;
 
     // Guardar la fundación con la nueva transacción y el total recaudado actualizado
-    await fundation.save();
+    await foundation.save();
 
-    return res.status(200).json(fundation);
+    return res.status(200).json(foundation);
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
@@ -88,18 +88,18 @@ const reciveWebhook = async (req, res) => {
 
 const getTransaction = async (req, res) => {
   try {
-    const { fundationId } = req.params;
+    const { foundationId } = req.params;
 
     // Buscar la fundación por ID
-    const fundation = await Fundation.findById(fundationId);
+    const foundation = await Foundation.findById(foundationId);
 
     // Verificar si la fundación existe
-    if (!fundation) {
+    if (!foundation) {
       return res.status(404).json({ message: "Fundación no encontrada." });
     }
 
     // Obtener las transacciones de la fundación (campo allTransactions)
-    const transactions = fundation.allTransactions;
+    const transactions = foundation.allTransactions;
 
     // Calcular el total recaudado sumando los montos de las transacciones
     const totalRaised = transactions.reduce((total, transaction) => total + transaction.amount, 0);
