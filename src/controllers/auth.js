@@ -76,7 +76,24 @@ const signIn = async (req, res) => {
     }
 }
 
+const isAuthenticate = async (req, res) => {
+    try {
+        const { id } = req.fundation;
+        
+        const fundation = await Fundation.findById(id);
+
+        if (fundation) {
+            return res.json({ message: 'Fundación encontrada', success: true });
+        } else {
+            return res.status(404).json({ message: 'Fundación no encontrada', success: false });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: 'Error del servidor', success: false });
+    }
+}
+
 module.exports = {
     signUp,
-    signIn
+    signIn,
+    isAuthenticate
 }

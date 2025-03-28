@@ -5,7 +5,7 @@ const { validateFields } = require('../middlewares/validate_fields');
 
 const { isValidEmail } = require('../helpers/db_validators');
 const { validateJWT } = require('../middlewares/validate_jwt');
-const { signUp, signIn } = require('../controllers/auth');
+const { signUp, signIn, isAuthenticate } = require('../controllers/auth');
 
 const router = Router();
 
@@ -29,5 +29,6 @@ router.post("/Sign-in",
 
 )
 
+router.get("/", validateJWT, isAuthenticate);
 
 module.exports = router;
