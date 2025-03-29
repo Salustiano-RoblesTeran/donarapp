@@ -1,11 +1,11 @@
 const { Router } = require("express");
-const { getFoundations, getCateogires, getFoundationsCategories, getFoundationId  } = require("../controllers/fundationsCtrl");
+const { getFoundations, getCategories, getFoundationsCategories, getFoundationId  } = require("../controllers/foundationsCtrl");
 
 const router = Router();
 
 router.get("/", getFoundations)
 
-router.get("/categories", getCateogires);
+router.get("/categories", getCategories);
 
 router.get("/filter", getFoundationsCategories)
 

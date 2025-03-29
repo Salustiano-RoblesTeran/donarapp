@@ -3,7 +3,7 @@ const Categories = require("../models/Categories")
 
 const getFoundations = async (req, res) => {
   try {
-    const foundation = await foundation.find()
+    const foundation = await Foundation.find()
       .select("-password")
       .populate("category", "category"); 
 
@@ -16,7 +16,7 @@ const getFoundations = async (req, res) => {
 };
 
 
-const getCateogires = async (req, res) => {
+const getCategories = async (req, res) => {
   try {
     const allCategories = await Categories.find();
     res.json({allCategories})
@@ -29,7 +29,7 @@ const getFoundationsCategories = async (req, res) => {
   try {
     const { category } = req.query;
 
-    const foundationsFilter =  await Foundation.find({ category });
+    const foundationsFilter =  await Foundation.find({ category }).select("-password").populate("category", "category"); ;
     res.json({ foundationsFilter })
 
   } catch (error) {
@@ -59,7 +59,7 @@ const getFoundationId = async (req, res) => {
 
 module.exports = {
     getFoundations,
-    getCateogires,
+    getCategories,
     getFoundationsCategories,
     getFoundationId
 }

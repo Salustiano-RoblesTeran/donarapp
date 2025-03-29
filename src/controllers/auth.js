@@ -14,8 +14,8 @@ const signUp = async (req, res) => {
         }
 
         // Verificar si el nombre de la fundación ya existe
-        const FoundationExist = await Foundation.findOne({ foundation_name });
-        if (FoundationExist) {
+        const foundationExist = await Foundation.findOne({ foundation_name });
+        if (foundationExist) {
             return res.status(400).json({ message: "El nombre de la fundación ya está registrado." });
         }
 
@@ -62,13 +62,13 @@ const signIn = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const Foundation = await Foundation.findOne({ email });
-        if (!Foundation) return res.status(404).json({ message: "Fundacion no encontrado" })
+        const foundation = await Foundation.findOne({ email });
+        if (!foundation) return res.status(404).json({ message: "Fundacion no encontrado" })
         
-            const isMatch = await bcrypt.compare(password, Foundation.password);
+            const isMatch = await bcrypt.compare(password, foundation.password);
             if (!isMatch) return res.status(400).json({ message: "Contraseña incorrecta" });
 
-            const token = await generateJWT(Foundation._id);
+            const token = await generateJWT(foundation._id);
 
             res.json({token})
     }catch (error) {
@@ -78,11 +78,11 @@ const signIn = async (req, res) => {
 
 const isAuthenticate = async (req, res) => {
     try {
-        const { id } = req.Foundation;
+        const { id } = req.foundation;
         
-        const Foundation = await Foundation.findById(id);
+        const foundation = await Foundation.findById(id);
 
-        if (Foundation) {
+        if (foundation) {
             return res.json({ message: 'Fundación encontrada', success: true });
         } else {
             return res.status(404).json({ message: 'Fundación no encontrada', success: false });

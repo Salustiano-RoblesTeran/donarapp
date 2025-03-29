@@ -19,7 +19,7 @@ router.post("/sign-up",
     ], signUp
 );
 
-router.post("/Sign-in", 
+router.post("/sign-in", 
     [
         check("email", "El correo no es valido!").isEmail(),
         check("email", "El campo es obligatorio!").notEmpty(),

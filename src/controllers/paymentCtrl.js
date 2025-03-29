@@ -50,7 +50,6 @@ const reciveWebhook = async (req, res) => {
     const payment = await new Payment(client).get({ id: body.data.id });
 
     const foundationData = payment.metadata;
-    console.log(foundationData.foundation_id, payment.transaction_amount, foundationData.message);
 
     const foundation = await Foundation.findById(foundationData.foundation_id);
 
@@ -67,7 +66,6 @@ const reciveWebhook = async (req, res) => {
       date: new Date(),
     };
 
-    console.log("donation", donation);
 
     // Agregar la donación a las transacciones de la fundación
     foundation.allTransactions.push(donation);

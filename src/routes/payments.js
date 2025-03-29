@@ -7,7 +7,7 @@ const router = Router();
 
 router.post('/donate', createDonation);
 
-router.get('/success', validateJWT, (req, res) => {
+router.get('/success', (req, res) => {
     res.redirect('http://localhost:5173/success')
 });
 
@@ -21,6 +21,6 @@ router.get('/pending', (req, res) => {
 
 router.post('/webhook', reciveWebhook);
 
-router.get('/transaction/:fundationId', getTransaction)
+router.get('/transaction/:foundationId', getTransaction)
 
 module.exports = router;
