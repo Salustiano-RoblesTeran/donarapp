@@ -8,7 +8,7 @@ const router = Router();
 router.post('/donate', createDonation);
 
 router.get('/success', (req, res) => {
-    res.redirect('http://localhost:5173/success')
+    res.redirect('https://donargg.netlify.app/success')
 });
 
 router.get('/failure', (req, res) => {

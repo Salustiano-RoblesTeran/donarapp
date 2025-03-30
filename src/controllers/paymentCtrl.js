@@ -25,11 +25,11 @@ const createDonation = async (req, res) => {
           message: description
         },
         back_urls: {
-          success: "http://localhost:3000/api/payments/success",
-          failure: "http://localhost:3000/api/payments/failure",
-          pending: "http://localhost:3000/api/payments/pending",
+          success: "https://donargg.netlify.app/api/payments/success",
+          failure: "https://donargg.netlify.app/api/payments/failure",
+          pending: "https://donargg.netlify.app/api/payments/pending",
         },
-        notification_url: "https://7ead-138-204-159-142.ngrok-free.app/api/payments/webhook",
+        notification_url: "https://donargg.netlify.app/api/payments/webhook",
         auto_return: "approved",
       },
     })
