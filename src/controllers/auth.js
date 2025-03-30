@@ -45,7 +45,7 @@ const signUp = async (req, res) => {
             description,
             targetAmount,
             password: hashedPassword,
-            totalRaised: 0 // Asignar 0 por defecto
+            totalRaised: 0
         });
 
         await newFoundation.save();
