@@ -49,12 +49,15 @@ const getFoundationsCategories = async (req, res) => {
     const responseData = foundationsFilter.map(foundation => {
       const fundsRaised = foundation.allTransactions.filter(transaction => transaction.status === "approved").reduce((total, transaction) => total + transaction.amount, 0);
 
+      const nameCategory = Categories.findById(foundation.category);
+
       return {
         _id: foundation._id,
         foundation_name: foundation.foundation_name,
         profile_url: foundation.profile_url,
         description: foundation.description,
-        fundsRaised: fundsRaised,
+        fundsRaised: fundsRaised || 0,
+        category: nameCategory,
         targetAmount: foundation.targetAmount,
         allTransactions: foundation.allTransactions
       };
@@ -85,13 +88,16 @@ const getFoundationId = async (req, res) => {
       .filter(transaction => transaction.status === "approved")
       .reduce((total, transaction) => total + transaction.amount, 0);
 
+      const nameCategory = Categories.findById(foundation.category);
+
     // Construir la respuesta
     const responseData = {
       _id: foundation._id,
       foundation_name: foundation.foundation_name,
       profile_url: foundation.profile_url,
       description: foundation.description,
-      fundsRaised: fundsRaised,
+      fundsRaised: fundsRaised || 0,
+      category: nameCategory,
       targetAmount: foundation.targetAmount,
       allTransactions: foundation.allTransactions
     };

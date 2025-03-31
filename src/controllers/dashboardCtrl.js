@@ -13,6 +13,8 @@ const getFoundation = async (req, res) => {
         .filter(transaction => transaction.status === "approved") 
         .reduce((total, transaction) => total + transaction.amount, 0);
 
+        const nameCategory = Categories.findById(foundation.category);
+
         // Estructurar la respuesta con solo los campos requeridos
         const responseData = {
             _id: foundation._id,
@@ -20,6 +22,7 @@ const getFoundation = async (req, res) => {
             profile_url: foundation.profile_url,
             description: foundation.description,
             fundsRaised: fundsRaised || 0,
+            ategory: nameCategory,
             targetAmount: foundation.targetAmount,
             allTransactions: foundation.allTransactions
         };
