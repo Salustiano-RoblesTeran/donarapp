@@ -5,12 +5,14 @@ const getFoundations = async (req, res) => {
   try {
     const foundations = await Foundation.find()
       .select("-password")
-      .populate("category", "category"); 
+      .populate("category", "category").lean();
 
     if (!foundations) return res.status(404).json({ success: false, message: "No hay fundaciones para mostrar" });
     
     const responseData = foundations.map(foundation => {
       const fundsRaised = foundation.allTransactions.filter(transaction => transaction.status === "approved").reduce((total, transaction) => total + transaction.amount, 0);
+
+      const categoryName = Categories.findById(foundation.category)
 
       return {
         _id: foundation._id,
@@ -18,6 +20,7 @@ const getFoundations = async (req, res) => {
         profile_url: foundation.profile_url,
         description: foundation.description,
         fundsRaised: fundsRaised,
+        category: categoryName,
         targetAmount: foundation.targetAmount,
         allTransactions: foundation.allTransactions
       };
