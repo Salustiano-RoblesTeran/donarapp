@@ -25,11 +25,11 @@ const createDonation = async (req, res) => {
           message: description
         },
         back_urls: {
-          success: "https://donargg.netlify.app/api/payments/success",
-          failure: "https://donargg.netlify.app/api/payments/failure",
-          pending: "https://donargg.netlify.app/api/payments/pending",
+          success: "https://donarapp.onrender.com/success",
+          failure: "https://donarapp.onrender.com/api/payments/failure",
+          pending: "https://donarapp.onrender.com/api/payments/pending",
         },
-        notification_url: "https://donargg.netlify.app/api/payments/webhook",
+        notification_url: "https://donarapp.onrender.com/api/payments/webhook",
         auto_return: "approved",
       },
     })
