@@ -25,7 +25,7 @@ const createDonation = async (req, res) => {
           message: description
         },
         back_urls: {
-          success: "https://donarapp.onrender.com/success",
+          success: "https://donarapp.onrender.com/api/payments/success",
           failure: "https://donarapp.onrender.com/api/payments/failure",
           pending: "https://donarapp.onrender.com/api/payments/pending",
         },
