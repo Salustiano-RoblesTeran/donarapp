@@ -72,32 +72,36 @@ const getFoundationId = async (req, res) => {
     const { id } = req.params;
     
     // Buscar la fundación por el ID
-    const foundation = await Foundation.findById(id).select("-password").populate("category", "category");
+    const foundation = await Foundation.findById(id)
+      .select("-password")
+      .populate("category", "category");
     
     if (!foundation) {
-      return res.status(404).json({ error: 'Fundación no encontrada' });
+      return res.status(404).json({ error: "Fundación no encontrada" });
     }
 
-    const responseData = foundation.map(foundation => {
-      const fundsRaised = foundation.allTransactions.filter(transaction => transaction.status === "approved").reduce((total, transaction) => total + transaction.amount, 0);
+    // Calcular el monto recaudado solo de transacciones aprobadas
+    const fundsRaised = foundation.allTransactions
+      .filter(transaction => transaction.status === "approved")
+      .reduce((total, transaction) => total + transaction.amount, 0);
 
-      return {
-        _id: foundation._id,
-        foundation_name: foundation.foundation_name,
-        profile_url: foundation.profile_url,
-        description: foundation.description,
-        fundsRaised: fundsRaised,
-        targetAmount: foundation.targetAmount,
-        allTransactions: foundation.allTransactions
-      };
-    });
+    // Construir la respuesta
+    const responseData = {
+      _id: foundation._id,
+      foundation_name: foundation.foundation_name,
+      profile_url: foundation.profile_url,
+      description: foundation.description,
+      fundsRaised: fundsRaised,
+      targetAmount: foundation.targetAmount,
+      allTransactions: foundation.allTransactions
+    };
 
-    res.json({ responseData });
+    res.json(responseData);
 
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
+};
 
 
 module.exports = {
