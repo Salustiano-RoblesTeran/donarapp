@@ -13,6 +13,7 @@ const getFoundations = async (req, res) => {
       const fundsRaised = foundation.allTransactions.filter(transaction => transaction.status === "approved").reduce((total, transaction) => total + transaction.amount, 0);
 
       return {
+        _id: foundation._id,
         foundation_name: foundation.foundation_name,
         profile_url: foundation.profile_url,
         description: foundation.description,
@@ -49,6 +50,7 @@ const getFoundationsCategories = async (req, res) => {
       const fundsRaised = foundation.allTransactions.filter(transaction => transaction.status === "approved").reduce((total, transaction) => total + transaction.amount, 0);
 
       return {
+        _id: foundation._id,
         foundation_name: foundation.foundation_name,
         profile_url: foundation.profile_url,
         description: foundation.description,
@@ -80,6 +82,7 @@ const getFoundationId = async (req, res) => {
       const fundsRaised = foundation.allTransactions.filter(transaction => transaction.status === "approved").reduce((total, transaction) => total + transaction.amount, 0);
 
       return {
+        _id: foundation._id,
         foundation_name: foundation.foundation_name,
         profile_url: foundation.profile_url,
         description: foundation.description,

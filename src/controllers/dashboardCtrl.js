@@ -15,6 +15,7 @@ const getFoundation = async (req, res) => {
 
         // Estructurar la respuesta con solo los campos requeridos
         const responseData = {
+            _id: foundation._id,
             foundation_name: foundation.foundation_name,
             profile_url: foundation.profile_url,
             description: foundation.description,
