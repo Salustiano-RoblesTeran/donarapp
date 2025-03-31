@@ -9,9 +9,7 @@ const getFoundations = async (req, res) => {
 
     if (!foundation) return res.status(404).json({ success: false, message: "No hay fundaciones para mostrar" });
     
-    let fundsRaised = foundation.allTransactions
-    .filter(transaction => transaction.status === "approved") 
-    .reduce((total, transaction) => total + transaction.amount, 0);
+    let fundsRaised = foundation.allTransactions.filter(transaction => transaction.status === "approved").reduce((total, transaction) => total + transaction.amount, 0);
 
     // Estructurar la respuesta con solo los campos requeridos
     const responseData = {
