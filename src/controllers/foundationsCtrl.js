@@ -8,8 +8,23 @@ const getFoundations = async (req, res) => {
       .populate("category", "category"); 
 
     if (!foundation) return res.status(404).json({ success: false, message: "No hay fundaciones para mostrar" });
+    
+    let fundsRaised = foundation.allTransactions
+    .filter(transaction => transaction.status === "approved") 
+    .reduce((total, transaction) => total + transaction.amount, 0);
 
-    res.json({ success: true, foundation });
+    // Estructurar la respuesta con solo los campos requeridos
+    const responseData = {
+      foundation_name: foundationsFilter.foundation_name,
+      profile_url: foundationsFilter.profile_url,
+      description: foundationsFilter.description,
+      fundsRaised: fundsRaised || 0,
+      targetAmount: foundationsFilter.targetAmount,
+      allTransactions: foundationsFilter.allTransactions
+    };
+  
+      res.json({ responseData })
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -30,7 +45,22 @@ const getFoundationsCategories = async (req, res) => {
     const { category } = req.query;
 
     const foundationsFilter =  await Foundation.find({ category }).select("-password").populate("category", "category"); ;
-    res.json({ foundationsFilter })
+
+    let fundsRaised = foundationsFilter.allTransactions
+    .filter(transaction => transaction.status === "approved") 
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+    // Estructurar la respuesta con solo los campos requeridos
+    const responseData = {
+        foundation_name: foundationsFilter.foundation_name,
+        profile_url: foundationsFilter.profile_url,
+        description: foundationsFilter.description,
+        fundsRaised: fundsRaised || 0,
+        targetAmount: foundationsFilter.targetAmount,
+        allTransactions: foundationsFilter.allTransactions
+    };
+
+    res.json({ responseData })
 
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -48,9 +78,21 @@ const getFoundationId = async (req, res) => {
       return res.status(404).json({ error: 'Fundación no encontrada' });
     }
 
+    let fundsRaised = foundation.allTransactions
+    .filter(transaction => transaction.status === "approved") 
+    .reduce((total, transaction) => total + transaction.amount, 0);
 
-    // Devolver la fundación y el monto recaudado
-    res.json({ foundation });
+    // Estructurar la respuesta con solo los campos requeridos
+      const responseData = {
+        foundation_name: foundationsFilter.foundation_name,
+        profile_url: foundationsFilter.profile_url,
+        description: foundationsFilter.description,
+        fundsRaised: fundsRaised || 0,
+        targetAmount: foundationsFilter.targetAmount,
+        allTransactions: foundationsFilter.allTransactions
+      };
+  
+      res.json({ responseData })
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

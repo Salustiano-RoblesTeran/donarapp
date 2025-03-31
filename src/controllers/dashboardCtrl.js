@@ -9,12 +9,16 @@ const getFoundation = async (req, res) => {
             return res.status(404).json({ msg: "Fundación no encontrada" });
         }
 
+        let fundsRaised = foundation.allTransactions
+        .filter(transaction => transaction.status === "approved") 
+        .reduce((total, transaction) => total + transaction.amount, 0);
+
         // Estructurar la respuesta con solo los campos requeridos
         const responseData = {
             foundation_name: foundation.foundation_name,
             profile_url: foundation.profile_url,
             description: foundation.description,
-            fundsRaised: foundation.fundsRaised,
+            fundsRaised: fundsRaised || 0,
             targetAmount: foundation.targetAmount,
             allTransactions: foundation.allTransactions
         };
