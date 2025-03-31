@@ -22,7 +22,7 @@ const getFoundations = async (req, res) => {
       };
     });
 
-    res.json({ foundations: responseData });
+    res.json({ responseData });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -58,7 +58,7 @@ const getFoundationsCategories = async (req, res) => {
       };
     });
 
-    res.json({ foundations: responseData });
+    res.json({ responseData });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -89,7 +89,7 @@ const getFoundationId = async (req, res) => {
       };
     });
 
-    res.json({ foundations: responseData });
+    res.json({ responseData });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
