@@ -13,12 +13,12 @@ const getFoundations = async (req, res) => {
 
     // Estructurar la respuesta con solo los campos requeridos
     const responseData = {
-      foundation_name: foundationsFilter.foundation_name,
-      profile_url: foundationsFilter.profile_url,
-      description: foundationsFilter.description,
+      foundation_name: foundation.foundation_name,
+      profile_url: foundation.profile_url,
+      description: foundation.description,
       fundsRaised: fundsRaised || 0,
-      targetAmount: foundationsFilter.targetAmount,
-      allTransactions: foundationsFilter.allTransactions
+      targetAmount: foundation.targetAmount,
+      allTransactions: foundation.allTransactions
     };
   
       res.json({ responseData })
